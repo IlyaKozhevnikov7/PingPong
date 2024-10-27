@@ -15,7 +15,8 @@ class PINGPONG_API APPGameMode : public AGameModeBase
 
 private:
 
-	APPArena* Arena;
+	UPROPERTY()
+	APPArena* Arena = nullptr;
 
 	FTimerHandle StartGameDelayTimer;
 

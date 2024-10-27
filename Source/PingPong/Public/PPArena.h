@@ -64,8 +64,6 @@ public:
 		Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	}
 
-	void Reset();
-
 	void StartNewGame();
 
 	void AddPlayer(APlayerController* newPlayer);
@@ -81,8 +79,6 @@ private:
 	void SpawnPawns();
 
 	void SetupTriggers();
-
-	void ResetPawn(int32 index);
 
 	UFUNCTION()
 	void OnGoalScored(AActor* overlappedActor, AActor* otherActor);

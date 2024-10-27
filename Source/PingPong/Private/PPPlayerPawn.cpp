@@ -2,34 +2,28 @@
 
 #include "PPPlayerPawn.h"
 
-APPPlayerPawn::APPPlayerPawn()
-{
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-void APPPlayerPawn::Move(float direction)
-{
-	MoveInternal(direction);
-	MoveServer(direction);
-}
-
 void APPPlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	bReplicates = true;
+	bAlwaysRelevant = true;
+	bNetLoadOnClient = true;
+
+	SetReplicateMovement(true);
 }
 
 void APPPlayerPawn::SetupPlayerInputComponent(UInputComponent* playerInputComponent)
 {
 	Super::SetupPlayerInputComponent(playerInputComponent);
 
-	FString inputCompName = playerInputComponent != nullptr ? "NULL" : playerInputComponent->GetName();
+	playerInputComponent->BindAxis("Move", this, &APPPlayerPawn::Move);
+}
 
-	UE_LOG(LogTemp, Warning, TEXT("SetupPlayerInputComponent %s"), *inputCompName);
-
-	if (playerInputComponent != nullptr)
-	{
-		playerInputComponent->BindAxis("Move", this, &APPPlayerPawn::Move);
-	}
+void APPPlayerPawn::Move(float direction)
+{
+	MoveInternal(direction);
+	MoveServer(direction);
 }
 
 void APPPlayerPawn::MoveServer_Implementation(float direction)

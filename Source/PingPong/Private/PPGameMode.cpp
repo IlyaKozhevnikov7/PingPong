@@ -5,8 +5,6 @@
 #include "PPArena.h"
 #include "PPPlayerState.h"
 
-#include "Engine/TargetPoint.h"
-
 void APPGameMode::PostLogin(APlayerController* newPlayer)
 {
 	Super::PostLogin(newPlayer);
@@ -16,16 +14,16 @@ void APPGameMode::PostLogin(APlayerController* newPlayer)
 
 void APPGameMode::SetArena(APPArena* arena)
 {
-	check(arena != nullptr);
-	check(Arena == nullptr);
-
-	Arena = arena;
+	if (Arena == nullptr && arena != nullptr)
+	{
+		Arena = arena;
+	}
 }
 
 void APPGameMode::AddPoint(APlayerController* controller)
 {
 	auto playerState = controller->GetPlayerState<APPPlayerState>();
-	check(playerState != nullptr);
+	checkf(playerState, TEXT("APPGameMode::AddPoint playerState is null"));
 
 	playerState->AddPoint();
 }
@@ -33,7 +31,7 @@ void APPGameMode::AddPoint(APlayerController* controller)
 void APPGameMode::OnGameStarted()
 {
 	auto gameState = GetGameState<APPGameStateBase>();
-	check(gameState);
+	checkf(gameState, TEXT("APPGameMode::OnGameStarted gameState is null"));
 
 	GetWorldTimerManager().SetTimer(StartGameDelayTimer, gameState, &APPGameStateBase::OnGameStarted, 1.0f, false);
 }

@@ -20,10 +20,6 @@ private:
 
 	FName MoveInputName = "Move";
 
-public:
-
-	APPPlayerPawn();
-
 private:
 
 	void BeginPlay() override;

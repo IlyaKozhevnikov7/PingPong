@@ -21,17 +21,9 @@ APPArena::APPArena() :
 	bNetLoadOnClient = true;
 }
 
-void APPArena::Reset()
-{
-	Ball->SetActorLocation(BallSpawnPoint->GetActorLocation());
-	
-	ResetPawn(0);
-	ResetPawn(1);
-}
-
 void APPArena::StartNewGame()
 {
-	Reset();
+	Ball->SetActorLocation(BallSpawnPoint->GetActorLocation());
 	Ball->Launch();
 }
 
@@ -65,6 +57,8 @@ void APPArena::BeginPlay()
 		return;
 
 	auto gameMode = GetWorld()->GetAuthGameMode<APPGameMode>();
+	checkf(gameMode, TEXT("APPArena::BeginPlay gameMode is null"));
+
 	gameMode->SetArena(this);
 
 	if (PlayerData.Num() < APPGameStateBase::PLAYER_AMOUNT)
@@ -109,12 +103,6 @@ void APPArena::SetupTriggers()
 	}
 }
 
-void APPArena::ResetPawn(int32 index)
-{
-	auto& currentData = PlayerData[index];
-	currentData.Pawn->SetActorLocationAndRotation(currentData.SpawnPoint->GetActorLocation(), currentData.SpawnPoint->GetActorRotation());
-}
-
 void APPArena::OnGoalScored(AActor* overlappedActor, AActor* otherActor)
 {
 	if (otherActor->IsA<APPBall>() == false)
@@ -132,7 +120,7 @@ void APPArena::OnGoalScored(AActor* overlappedActor, AActor* otherActor)
 	}
 
 	auto playerState = data->Pawn->GetPlayerState<APPPlayerState>();
-	check(playerState);
+	checkf(playerState, TEXT("APPArena::OnGoalScored playerState is null"));
 
 	playerState->AddPoint();
 	StartNewGame();
