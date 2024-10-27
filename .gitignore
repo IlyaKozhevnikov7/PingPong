@@ -1,6 +1,6 @@
 .vs
 *.sln
-.idea
+.vsconfig
 
 Binaries/
 Build/
